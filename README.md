@@ -20,8 +20,8 @@ Improper handling of some steps, particularly those involving bootloader and par
 >
 
 *Cloud providers console access : <br>
-AWS: EC2 Instance Connect, DigitalOcean : Droplet Console, Linode : Lish, OVH : KVM,
-Vultr : View Console, GCP and Azure : Serial Console*
+AWS: EC2 Instance Connect, DigitalOcean: Droplet Console, Linode: Lish, OVH: KVM,
+Vultr: View Console, GCP and Azure: Serial Console*
 
 <br>
 
@@ -69,13 +69,12 @@ sudo wget https://alpinelinux.org/keys/ncopa.asc
 gpg --import ncopa.asc 
 gpg --verify alpine-virt-3.20.1-x86_64.iso.asc alpine-virt-3.20.1-x86_64.iso
 ```
-Now that we have the alpine image avilable and checked, we will boot from it. 
+We now have the alpine image avilable and checked.
 
 
 ### 3. Boot from alpine
 
-
-From the moment we reboot the systsem, to perform grub menu entries, until we finish the alpine os initial setup, the SSH connection will not be available.
+From the moment we reboot the system, to perform grub menu entries, until we finish the alpine os initial setup, the SSH connection will not be available.
 
 For further action, enter your cloud provider console access *(see list above)*.
 
@@ -96,11 +95,14 @@ grub> initrd (loop)/boot/initramfs-virt
 
 We can then boot into the live alpine system
 
-```
-grub> boot
-```
+`grub> boot`
 
 
 ### 4. Post-Boot File Manipulation and Mounting:
 
+Booting into this minimalistic alpine environment, we are prompted with a shell, the initial shell.<br>
+It allows to perform basic actions, such as copying the alpine iso in the RAM and unmounting the main disk.
+
+
+### 5. Alpine installation
 

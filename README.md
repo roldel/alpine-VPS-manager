@@ -100,24 +100,24 @@ We can then boot into the live alpine system
 
 ### 4. Post-Boot File Manipulation and Mounting:
 
+As we boot into the live alpine environment we have just set up, we are propmpted with an initial shell, from which we can peform the required initial steps.
 In order to overwrite the target installation disk, during the alpine installation process, we will need to :
 
 1. Mount the iso containing partition, to access its files
+```mount /dev/sda1 /media/sda1```
+
 2. Copy the ISO file from that partition, to a temporary RAM-based filesystem
+```cp /media/sda1/alpine-virt-3.14.2-x86_64.iso /dev/shm```
+
 3. Unmount the host partition
-4. Mount the ISO file as if it were a CD-ROM to access its contents.
+```umount /dev/sda1```
+
+4. Mount the ISO file as if it were a CD-ROM to access its contents
+```mount -o loop -t iso9660 /dev/shm/alpine-virt-3.14.2-x86_64.iso /media/cdrom```
 
 
 ```
-#1.
-mount /dev/sda1 /media/sda1
-#2.
-cp /media/sda1/alpine-virt-3.14.2-x86_64.iso /dev/shm
-#3.
-umount /dev/sda1
-#4.  
-mount -o loop -t iso9660 /dev/shm/alpine-virt-3.14.2-x86_64.iso /media/cdrom
-```
+
 
 ### 5. Alpine installation
 

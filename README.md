@@ -1,6 +1,6 @@
 # ALPINE VPS MANAGER
 
-Alpine Linux is a security-oriented, lightweight Linux distribution.
+Alpine Linux is a security-oriented, lightweight Linux distribution. Unfortunately, it does not always come as an option, amongst the default os offered by cloud providers.
 <br>
 By following this guide, you will set up a secure and efficient Alpine Linux environment on your VPS.
 
@@ -12,14 +12,19 @@ By following this guide, you will set up a secure and efficient Alpine Linux env
 <br>
 
 > WARNING :\
+<br>
 This guide assumes a basic level of familiarity with Linux command-line operations.\
-Proceed with caution and ensure that you have backups of any important data before making significant changes to your VPS configuration.
-**The Alpine installation will completely overwrite the current OS and all existing files.**\
+**The Alpine installation will completely overwrite the current OS and all existing files.**
+Proceed with caution and ensure that you have backups of any important data before making significant changes to your VPS configuration.\
 Improper handling of some steps, particularly those involving bootloader and partition changes, can render your VPS inoperable.\
-**GRUB bootloader and console access required**
+**GRUB bootloader and console access required** <br>
+<br>
+Cloud providers console access list (not exhaustive) : <br>
+<br>
+AWS: EC2 Instance Connect\
+DigitalOcean: Droplet Console\
+Linode: Lish\
+OVH: KVM\
+Vultr: View Console\
+GCP and Azure: Serial Console
 >
-
-*Cloud providers console access : <br>
-AWS: EC2 Instance Connect, DigitalOcean: Droplet Console, Linode: Lish, OVH: KVM,
-Vultr: View Console, GCP and Azure: Serial Console*
-

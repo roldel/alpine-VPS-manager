@@ -1,4 +1,35 @@
-### 1. Prepare access to GRUB menu 
+
+### 1. Download alpine OS  and check
+
+Alpine images are available on their download page [https://alpinelinux.org/downloads/](https://alpinelinux.org/downloads/)
+
+From those, you have to chose the one that best suits your needs. For reference, in this example, we will be running alpine on an x86_64 architecture VPS. Therefore, we will use the "Virtual" image, optimized for virtual systems.  
+
+We download the selected image, as well as its sha256sum and gpg files, for integrity and authenticity checks
+
+
+
+```
+cd /
+sudo wget https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-virt-3.20.1-x86_64.iso 
+sudo wget https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-virt-3.20.1-x86_64.iso.sha256 
+sudo wget https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-virt-3.20.1-x86_64.iso.asc
+```
+
+Integrity and Authenticity checks :
+
+```
+#Integrity check 
+sha256sum -c alpine-virt-3.20.1-x86_64.iso.sha256
+
+# Authenticity check
+sudo wget https://alpinelinux.org/keys/ncopa.asc
+gpg --import ncopa.asc 
+gpg --verify alpine-virt-3.20.1-x86_64.iso.asc alpine-virt-3.20.1-x86_64.iso
+```
+We now have the alpine image avilable and checked.
+
+### 2. Prepare access to the GRUB menu 
 
 Most VPS users want their servers to reboot promptly when it needs to happen. Therefore, cloud providers often set the GRUB menu timeout option to 0, which prevents GRUB menu display upon startup.
 
@@ -14,35 +45,13 @@ sudo update-grub
 ```
 
 
-### 2. Download alpine OS  and check
+### 3. Boot into alpine live system
 
-Alpine images are available on their download page [https://alpinelinux.org/downloads/](https://alpinelinux.org/downloads/)
-
-As we will be running VPS hosted, based on x86_64 architecture, we select the appropriate virtual x86_64 image and download the sha256sum and gpg files, for integrity and authenticity checks
-
-```
-cd /
-sudo wget https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-virt-3.20.1-x86_64.iso 
-sudo wget https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-virt-3.20.1-x86_64.iso.sha256 
-sudo wget https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-virt-3.20.1-x86_64.iso.asc
-```
-
-Integrity check and Authenticity check *(optional but recommended)*:
-
-```
-#Integrity check 
-sha256sum -c alpine-virt-3.20.1-x86_64.iso.sha256
-
-# Authenticity check
-sudo wget https://alpinelinux.org/keys/ncopa.asc
-gpg --import ncopa.asc 
-gpg --verify alpine-virt-3.20.1-x86_64.iso.asc alpine-virt-3.20.1-x86_64.iso
-```
-We now have the alpine image avilable and checked.
-
-### 3. Alpine live system boot
+>
+WARNING
 
 From the moment we reboot the system, to perform grub menu entries, until we finish the alpine os initial setup, the SSH connection will not be available.
+>
 
 For further action, enter your cloud provider console access *(see list above)*.
 
@@ -68,12 +77,11 @@ We can then boot into the live alpine system
 
 ### 4. Post-Boot File Manipulation and Mounting:
 
-Following our `grub> boot` command, we enter a live linux alpine environment. All the changes we make will be lost upon next reboot.
-Nevertheless this environment provides the required tools to set up 
+The grub configuration we have setup, boots an alpine live environment and prompt us with an initial shell. 
 
-
-As we boot into the live alpine environment we have just set up, we are propmpted with an initial shell, from which we can peform the required initial steps.
-In order to overwrite the target installation disk, during the alpine installation process, we will need to :
+This environment is not persistent, the changes we make will be lost upon next reboot.
+Nevertheless this environment provides the required tools to manage mounts and make installation files (contained in the iso) available at the right location.
+Into this initial prompted shell :
 
 1. Mount the iso containing partition, to access its files
 ```mount /dev/sda1 /media/sda1```
@@ -87,8 +95,11 @@ In order to overwrite the target installation disk, during the alpine installati
 4. Mount the ISO file as if it were a CD-ROM to access its contents
 ```mount -o loop -t iso9660 /dev/shm/alpine-virt-3.14.2-x86_64.iso /media/cdrom```
 
-Through those steps, we have made available the alpine iso into the RAM, our live system will be able to 
+
+
 
 
 ### 5. Alpine installation
+
+
 

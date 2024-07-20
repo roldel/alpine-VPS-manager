@@ -1,0 +1,1 @@
+In order to install the alpine image on the remote VPS (debian 12 host in this example), we will need to :

@@ -24,4 +24,4 @@ proceeding beyond step 2, the SSH connection will not be possible until finaliza
 
 Procedure [alpine_os_vps_installation/actions](actions.md)
 
-[Project Root](../README.md)
+[Project Root](../../README.md)

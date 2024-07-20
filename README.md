@@ -11,8 +11,7 @@ By following this guide, you will set up a secure and efficient Alpine Linux env
 
 <br>
 
-> WARNING :<br>
-<br>
+> WARNING :
 This guide assumes a basic level of familiarity with Linux command-line operations.\
 **The Alpine installation will completely overwrite the current OS and all existing files.**
 Proceed with caution and ensure that you have backups of any important data before making significant changes to your VPS configuration.\

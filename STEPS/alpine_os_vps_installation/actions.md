@@ -47,9 +47,8 @@ sudo update-grub
 
 ### 3. Boot into alpine live system
 
->
-WARNING
-
+>WARNING :<br>
+<br>
 From the moment we reboot the system, to perform grub menu entries, until we finish the alpine os initial setup, the SSH connection will not be available.
 >
 
@@ -103,3 +102,5 @@ Into this initial prompted shell :
 
 
 
+
+[Back to Overview](overview.md)

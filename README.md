@@ -11,7 +11,7 @@ By following this guide, you will set up a secure and efficient Alpine Linux env
 
 <br>
 
-> WARNING :\
+> WARNING :<br>
 <br>
 This guide assumes a basic level of familiarity with Linux command-line operations.\
 **The Alpine installation will completely overwrite the current OS and all existing files.**

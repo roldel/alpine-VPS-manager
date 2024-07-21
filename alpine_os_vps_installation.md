@@ -153,7 +153,7 @@ At this point :
 
 <br>
 
-Alpine live system is now ready for successful boot.\
+Alpine live system is now ready for successful boot.
 
 Exit the initramfs emergency shell and continue boot by typing 
 ```

@@ -2,19 +2,28 @@
 
 ### Overview
 
-In order to install alpine OS on a remote VPS, we will first need to download an alpine image and check it.
-
-Then we will setup the GRUB bootloader, in order to boot from the downloaded iso image, into an alpine live environement (operating from the RAM).<br>
 
 
-This live environement is operational, but it is not persistent and lacks installation files and features, required for the full install of the alpine OS.
+To install Alpine OS on a remote VPS, complete the following steps:
 
-Those missing elements are contained in the iso file. To make them available in our live system, we mount the main disk and copy the iso file from it, into the RAM.
+1. Download and Verify Alpine Image
 
-We will then mount the RAM located iso, as a loopback device. This way the system will consider the iso as physical device based.
-From here, the process becomes similar to a usb or cdrom based installation.
+2. Prepare Access to GRUB menu
+    - Check GRUB configuration, ensures access to GRUB menu options upon reboot
 
-As both the live environment and the iso are then loaded into the RAM, the main disk is not in use anymore, can be unmounted and is free for overwritting, when running the alpine full installation setup. 
+3. Setup Alpine Boot:
+    - Configure GRUB to boot from the downloaded ISO image, which will attempt to launch an Alpine live environment running from RAM. **Initial attempts fails**.
+
+4. Post-Boot File Manipulation and Mounting:
+    - The initial boot attempt fails because the system requires files from the ISO image, that are not automatically retrieved in this setup.
+    - This failure will present the initramfs emergency recovery shell.
+    - Within the initramfs shell, manually load the ISO into RAM and make it available as a loopback device, simulating a plugged-in CD-ROM.
+
+5. Operational Live Environment and Full Installation:
+    - The live environment is now operational. Though non-persistent, it comprises all the required files and tool to finalize the installation
+    
+    - Initiate the full installation by using the Alpine installer tool.
+
 
 <br>
 
@@ -22,13 +31,13 @@ As both the live environment and the iso are then loaded into the RAM, the main 
 
 <br>
 
-### 1. Download alpine OS  and check
+### 1. Download and Verify Alpine Image
 
 Alpine images are available on their download page [https://alpinelinux.org/downloads/](https://alpinelinux.org/downloads/)
 
-From those, you have to chose the one that best suits your needs. For reference, in this example, we will be running alpine on an x86_64 architecture VPS. Therefore, we will use the "Virtual" image, optimized for virtual systems.  
+From those, you have to chose the one that best suits your needs. In this example, we will run Alpine on an x86_64 architecture VPS. Therefore, we use the "Virtual" image, optimized for virtual systems.  
 
-We download the selected image, as well as its sha256sum and gpg files, for integrity and authenticity checks
+Download the selected image, as well as its sha256sum and gpg files, for integrity and authenticity checks
 
 
 
@@ -39,7 +48,7 @@ sudo wget https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-vir
 sudo wget https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-virt-3.20.1-x86_64.iso.asc
 ```
 
-Integrity and Authenticity checks :
+Integrity and Authenticity checks *(optional but recommended)* :
 
 ```
 #Integrity check 
@@ -50,39 +59,47 @@ sudo wget https://alpinelinux.org/keys/ncopa.asc
 gpg --import ncopa.asc 
 gpg --verify alpine-virt-3.20.1-x86_64.iso.asc alpine-virt-3.20.1-x86_64.iso
 ```
-We now have the alpine image avilable and checked.
+The Alpine image is available and checked.
 
-### 2. Prepare access to the GRUB menu 
+<br>
 
-Most VPS users want their servers to reboot promptly when it needs to happen. Therefore, cloud providers often set the GRUB menu timeout option to 0, which prevents GRUB menu display upon startup.
+### 2. Prepare Access to GRUB menu
 
-As we will need to access it, once logged into the VPS, navigate to the `/etc/default` folder.
-There will be a `grub` file and a `grub.d/` folder ( grub.d files supersede the /etc/default/grub file instructions). Make sure that you set ```GRUB_TIMEOUT=5 ``` or more.
+VPS users want their servers to reboot promptly. Therefore, cloud providers often set the GRUB menu timeout option to 0, which prevents GRUB menu display upon startup.
+
+As we need to access it, navigate to the `/etc/default` folder.
+It contains a `grub` file and a `grub.d/` folder ( `grub.d/` files supersede the `/etc/default/grub` file instructions). Make sure that you set ```GRUB_TIMEOUT=5 ``` or more.\
 For this modification to be effective, the grub configuration file needs to be updated :
 
 ```
-#Alternatively use this command
+# Alternatively use this command
 echo "GRUB_TIMEOUT=5" | sudo tee /etc/default/grub.d/timeout.cfg
 
+# Updates GRUB config
 sudo update-grub
 ```
 
+<br>
 
-### 3. Boot into alpine live system
+### 3. Set Up Alpine Boot
 
 >WARNING :
-From the moment we reboot the system, to perform grub menu entries, until we finish the alpine OS initial setup, the SSH connection will not be available.
+From the moment we reboot the system, to perform grub menu entries, until we finalize the Alpine OS installation, the SSH connection will not be available.
 >
 
-For further action, enter your cloud provider console access *(see list above)*.
+Enter your cloud provider console access.
 
 Inside the console, reboot your system and upon startup, when grub options appear, press 'c' to enter grub menu.
-You should see the prompt :\
-`grub>`
+You should see the prompt :
+```
+grub>
+```
 
-In the GRUB bootloader, we assign the alpine ISO as a loopback device, so the system treats it as a virtual disk it can boot from
+In the GRUB bootloader, we assign the Alpine ISO as a loopback device, so the system treats it as a virtual disk it can boot from
 
-```grub> loopback loop /alpine-virt-3.14.2-x86_64.iso```
+```
+grub> loopback loop /alpine-virt-3.14.2-x86_64.iso
+```
 
 To make it bootable, we need to load the kernel and the initial ramdisk from the loopback device (loop)
 
@@ -91,19 +108,27 @@ grub> linux (loop)/boot/vmlinuz-virt
 grub> initrd (loop)/boot/initramfs-virt
 ```
 
-We can then boot into the live alpine system
+We can then boot into the live Alpine system
 
-`grub> boot`
+```
+grub> boot
+```
 
+**The initial boot attempt fails**\
+To boot successfully, the system requires files and tools from the ISO, mounted specifically. As we have not set it up yet, it fails and prompts us with the "initramfs emergency recovery shell".\
+We use this shell for further configuration.
+
+<br>
 
 ### 4. Post-Boot File Manipulation and Mounting:
 
-The grub configuration we have setup, boots an alpine live environment and prompt us with an initial shell. 
-
-This environment is not persistent, the changes we make will be lost upon next reboot.
-Nevertheless this environment provides the required tools to manage mounts and make installation files (contained in the iso) available at the right location.
-Into this initial prompted shell :
-
+In the initramfs emergency recovery shell:
+- mount the ISO image containing disk
+- copy the ISO image into the RAM
+- unmount the disk 
+- mount the RAM loaded ISO image as a loopback device in /media/cdrom
+<br>
+<br>
 ```
 # Mount the iso containing partition, to access its files
 mount /dev/sda1 /media/sda1
@@ -118,14 +143,40 @@ umount /dev/sda1
 mount -o loop -t iso9660 /dev/shm/alpine-virt-3.14.2-x86_64.iso /media/cdrom
 ```
 
-At this point, we have setup the alpine live system and made available the required installation files from the iso, mounted as physical device. This is all happening in the RAM, allwoing the main disk to be free for our new installation overwritting.
 
-We can now exit the initial shell by typing `exit`\
-The alpine welcome screen should display.
+At this point :
 
-### 5. Alpine installation
+- Alpine ISO kernel and initramfs have been assigned in the GRUB for boot
+- Alpine ISO is mounted as a loopback device, and will be considered like a plugged-in physical cdrom
+- Both above components are RAM loaded, rendering the system disks free for for the full installation overwritting 
 
+<br>
 
+Alpine live system is now ready for successful boot.\
 
+Exit the initramfs emergency shell and continue boot by typing 
+```
+exit
+```
+
+The Alpine welcome screen should display.
+
+<br>
+
+### 5. Operational Live Environment and Full Installation
+
+When prompted for login, type `root`. root user has no password at this point.
+
+In Alpine welcome screen enter `setup-alpine` to initiate the Alpine installer.\
+Follow up the question prompts.\
+The default SSH behavior prohibit password login as root user. Along the installation process, create an additional user, it can be reachable via password or ssh key if provided.\
+When it comes to disk, chose the disk to overwrite and choose the type 'sys'
+
+It is possible to automate this operation with an answefile, that will define the desired option for the installer configuration.
+
+`setup-alpine -f <answerfile> `
+
+<br>
+<br>
 
 [Project Root](README.md)

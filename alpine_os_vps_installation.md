@@ -1,3 +1,26 @@
+## Alpine OS VPS installation
+
+### Overview
+
+In order to install alpine OS on a remote VPS, we will first need to download an alpine image and check it.
+
+Then we will setup the GRUB bootloader, in order to boot from the downloaded iso image, into an alpine live environement (operating from the RAM).<br>
+
+
+This live environement is operational, but it is not persistent and lacks installation files and features, required for the full install of the alpine OS.
+
+Those missing elements are contained in the iso file. To make them available in our live system, we mount the main disk and copy the iso file from it, into the RAM.
+
+We will then mount the RAM located iso, as a loopback device. This way the system will consider the iso as physical device based.
+From here, the process becomes similar to a usb or cdrom based installation.
+
+As both the live environment and the iso are then loaded into the RAM, the main disk is not in use anymore, can be unmounted and is free for overwritting, when running the alpine full installation setup. 
+
+<br>
+
+<hr>
+
+<br>
 
 ### 1. Download alpine OS  and check
 
@@ -48,7 +71,7 @@ sudo update-grub
 ### 3. Boot into alpine live system
 
 >WARNING :
-From the moment we reboot the system, to perform grub menu entries, until we finish the alpine os initial setup, the SSH connection will not be available.
+From the moment we reboot the system, to perform grub menu entries, until we finish the alpine OS initial setup, the SSH connection will not be available.
 >
 
 For further action, enter your cloud provider console access *(see list above)*.
@@ -81,25 +104,28 @@ This environment is not persistent, the changes we make will be lost upon next r
 Nevertheless this environment provides the required tools to manage mounts and make installation files (contained in the iso) available at the right location.
 Into this initial prompted shell :
 
-1. Mount the iso containing partition, to access its files
-```mount /dev/sda1 /media/sda1```
+```
+# Mount the iso containing partition, to access its files
+mount /dev/sda1 /media/sda1
 
-2. Copy the ISO file from that partition, to a temporary RAM-based filesystem
-```cp /media/sda1/alpine-virt-3.14.2-x86_64.iso /dev/shm```
+# Copy the ISO file from that partition, to a temporary RAM-based filesystem
+cp /media/sda1/alpine-virt-3.14.2-x86_64.iso /dev/shm
 
-3. Unmount the host partition
-```umount /dev/sda1```
+# Unmount the host partition
+umount /dev/sda1
 
-4. Mount the ISO file as if it were a CD-ROM to access its contents
-```mount -o loop -t iso9660 /dev/shm/alpine-virt-3.14.2-x86_64.iso /media/cdrom```
+# Mount the ISO file as if it were a CD-ROM to access its contents
+mount -o loop -t iso9660 /dev/shm/alpine-virt-3.14.2-x86_64.iso /media/cdrom
+```
 
+At this point, we have setup the alpine live system and made available the required installation files from the iso, mounted as physical device. This is all happening in the RAM, allwoing the main disk to be free for our new installation overwritting.
 
-
-
+We can now exit the initial shell by typing `exit`\
+The alpine welcome screen should display.
 
 ### 5. Alpine installation
 
 
 
 
-[Back to Overview](overview.md)
+[Project Root](../README.md)

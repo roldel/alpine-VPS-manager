@@ -1,4 +1,4 @@
- Define project guidelines
+Complete sections :
  
 - Alpine base image install on VPS
 
@@ -7,3 +7,7 @@
 - Update SSH port
 
 - Docker install
+
+
+Compile all commands into command summary file
+

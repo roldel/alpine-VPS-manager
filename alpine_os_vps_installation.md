@@ -129,6 +129,7 @@ In the initramfs emergency recovery shell:
 - mount the RAM loaded ISO image as a loopback device in /media/cdrom
 <br>
 <br>
+
 ```
 # Mount the iso containing partition, to access its files
 mount /dev/sda1 /media/sda1

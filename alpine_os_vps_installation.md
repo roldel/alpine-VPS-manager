@@ -9,18 +9,18 @@ To install Alpine OS on a remote VPS, complete the following steps:
 1. Download and Verify Alpine Image
 
 2. Prepare Access to GRUB menu
-    - Check GRUB configuration, ensures access to GRUB menu options upon reboot
+    - Check GRUB configuration, ensures GRUB menu display upon reboot
 
 3. Setup Alpine Boot:
-    - Configure GRUB to boot from the downloaded ISO image, which will attempt to launch an Alpine live environment running from RAM. **Initial attempts fails**.
+    - Configure GRUB to boot from the downloaded ISO image, which will attempt to launch an Alpine live environment running from RAM. **The initial attempt fails**
 
 4. Post-Boot File Manipulation and Mounting:
-    - The initial boot attempt fails because the system requires files from the ISO image, that are not automatically retrieved in this setup.
-    - This failure will present the initramfs emergency recovery shell.
-    - Within the initramfs shell, manually load the ISO into RAM and make it available as a loopback device, simulating a plugged-in CD-ROM.
+    - The initial boot attempt fails because the system requires files from the ISO image, that are not automatically retrieved in this setup
+    - Upon failure the initramfs emergency recovery shell is presented
+    - Within the initramfs shell, manually load the ISO into RAM and make it available as a loopback device, simulating a plugged-in CD-ROM
 
 5. Operational Live Environment and Full Installation:
-    - The live environment is now operational. Though non-persistent, it comprises all the required files and tool to finalize the installation
+    - The live environment is now operational. Though non-persistent, it comprises all the required files and tools to finalize the installation
     
     - Initiate the full installation by using the Alpine installer tool.
 
@@ -37,7 +37,7 @@ Alpine images are available on their download page [https://alpinelinux.org/down
 
 From those, you have to chose the one that best suits your needs. In this example, we will run Alpine on an x86_64 architecture VPS. Therefore, we use the "Virtual" image, optimized for virtual systems.  
 
-Download the selected image, as well as its sha256sum and gpg files, for integrity and authenticity checks
+Download the selected image, as well as its sha256sum and gpg files, for integrity anS VPS installationd authenticity checks :
 
 
 
@@ -67,15 +67,16 @@ The Alpine image is available and checked.
 
 VPS users want their servers to reboot promptly. Therefore, cloud providers often set the GRUB menu timeout option to 0, which prevents GRUB menu display upon startup.
 
-As we need to access it, navigate to the `/etc/default` folder.
-It contains a `grub` file and a `grub.d/` folder ( `grub.d/` files supersede the `/etc/default/grub` file instructions). Make sure that you set ```GRUB_TIMEOUT=5 ``` or more.\
+Check the `/etc/default` folder.\
+It contains a `grub` file and a `grub.d/` folder ( `grub.d/` folder contained files supersede the `/etc/default/grub` file instructions).\
+Make sure that you set ```GRUB_TIMEOUT=5``` or more.\
 For this modification to be effective, the grub configuration file needs to be updated :
 
 ```
 # Alternatively use this command
 echo "GRUB_TIMEOUT=5" | sudo tee /etc/default/grub.d/timeout.cfg
 
-# Updates GRUB config
+# Update GRUB config
 sudo update-grub
 ```
 
@@ -89,34 +90,34 @@ From the moment we reboot the system, to perform grub menu entries, until we fin
 
 Enter your cloud provider console access.
 
-Inside the console, reboot your system and upon startup, when grub options appear, press 'c' to enter grub menu.
+Inside the console, reboot the system and upon startup, when grub options appear, press 'c' to enter grub menu.
 You should see the prompt :
 ```
 grub>
 ```
 
-In the GRUB bootloader, we assign the Alpine ISO as a loopback device, so the system treats it as a virtual disk it can boot from
+In the GRUB bootloader, assign the Alpine ISO as a loopback device, so the system treats it as a virtual disk it can boot from
 
 ```
 grub> loopback loop /alpine-virt-3.14.2-x86_64.iso
 ```
 
-To make it bootable, we need to load the kernel and the initial ramdisk from the loopback device (loop)
+To make it bootable, load the kernel and the initial ramdisk from the loopback device (loop)
 
 ```
 grub> linux (loop)/boot/vmlinuz-virt
 grub> initrd (loop)/boot/initramfs-virt
 ```
 
-We can then boot into the live Alpine system
+Then boot into the live Alpine system
 
 ```
 grub> boot
 ```
 
 **The initial boot attempt fails**\
-To boot successfully, the system requires files and tools from the ISO, mounted specifically. As we have not set it up yet, it fails and prompts us with the "initramfs emergency recovery shell".\
-We use this shell for further configuration.
+To boot successfully, the system requires files and tools from the ISO, mounted specifically. As it is not set up yet, it fails and prompts the "initramfs emergency recovery shell".\
+Use this shell for further configuration.
 
 <br>
 
@@ -166,18 +167,30 @@ The Alpine welcome screen should display.
 
 ### 5. Operational Live Environment and Full Installation
 
-When prompted for login, type `root`. root user has no password at this point.
+When prompted for login, type `root`. The default created user named 'root', is intialized without password.
 
 In Alpine welcome screen enter `setup-alpine` to initiate the Alpine installer.\
 Follow up the question prompts.\
-The default SSH behavior prohibit password login as root user. Along the installation process, create an additional user, it can be reachable via password or ssh key if provided.\
-When it comes to disk, chose the disk to overwrite and choose the type 'sys'
+The default SSH behavior prohibit password login as root user. Along the installation process, create an additional user, ssh connection to it will be possible via password or provided ssh key.\
+When it comes to disk, chose the disk to overwrite and choose the type 'sys'.
 
 It is possible to automate this operation with an answefile, that will define the desired option for the installer configuration.
 
 `setup-alpine -f <answerfile> `
 
 <br>
+
+**Security consideration :**<br>
+<br>
+As the Alpine installer process is managed from the cloud provider console, which may not be the most secure channel, it is advisable to initiate a secure SSH connection and change all passwords saved through the cloud provider console access, once the setup is complete.
+
+
+<br>
 <br>
 
-[Project Root](README.md)
+
+Next step : [Alpine Firewall Setup](alpine_firewall_setup.md)
+
+<br>
+
+Back to project [README.md](README.md)

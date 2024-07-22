@@ -19,15 +19,23 @@ To configure Alpine OS firewall on a remote VPS, complete the following steps:
 Security warning, potential ssh lockout
 
 <br>
+
 <hr>
 
 <br>
 
-Main content
+### 1. Install iptables
 
 <br>
 
+
+```sh
+apk add iptables
 ```
+
+### 2. Set iptables rules
+
+```sh
 # Flush existing rules
 iptables -F
 iptables -X
@@ -48,5 +56,18 @@ iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 
 ```
+
+### 3. Persist iptables rules
+
+```
+# Set iptables to start on reboot 
+rc-update add iptables 
+
+# Write the firewall rules to disk 
+rc-service iptables save
+
+```
+
+
 
 [Back to project README](README.md)

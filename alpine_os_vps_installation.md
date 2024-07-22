@@ -24,6 +24,11 @@ To install Alpine OS on a remote VPS, complete the following steps:
     
     - Initiate the full installation by using the Alpine installer tool.
 
+<br>
+
+**WARNING :**\
+From step 3 system reboot, until finalized OS installation, SSH connection will not be available. Cloud provider console access required
+
 
 <br>
 
@@ -37,11 +42,11 @@ Alpine images are available on their download page [https://alpinelinux.org/down
 
 From those, you have to chose the one that best suits your needs. In this example, we will run Alpine on an x86_64 architecture VPS. Therefore, we use the "Virtual" image, optimized for virtual systems.  
 
-Download the selected image, as well as its sha256sum and gpg files, for integrity anS VPS installationd authenticity checks :
+Download the selected image, as well as its sha256sum and gpg files, for integrity and VPS installationd authenticity checks :
 
 
 
-```
+```sh
 cd /
 sudo wget https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-virt-3.20.1-x86_64.iso 
 sudo wget https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-virt-3.20.1-x86_64.iso.sha256 
@@ -50,7 +55,7 @@ sudo wget https://dl-cdn.alpinelinux.org/alpine/v3.20/releases/x86_64/alpine-vir
 
 Integrity and Authenticity checks *(optional but recommended)* :
 
-```
+```sh
 #Integrity check 
 sha256sum -c alpine-virt-3.20.1-x86_64.iso.sha256
 
@@ -72,7 +77,7 @@ It contains a `grub` file and a `grub.d/` folder ( `grub.d/` folder contained fi
 Make sure that you set ```GRUB_TIMEOUT=5``` or more.\
 For this modification to be effective, the grub configuration file needs to be updated :
 
-```
+```sh
 # Alternatively use this command
 echo "GRUB_TIMEOUT=5" | sudo tee /etc/default/grub.d/timeout.cfg
 
@@ -84,34 +89,31 @@ sudo update-grub
 
 ### 3. Set Up Alpine Boot
 
->WARNING :
-From the moment we reboot the system, to perform grub menu entries, until we finalize the Alpine OS installation, the SSH connection will not be available.
->
 
 Enter your cloud provider console access.
 
 Inside the console, reboot the system and upon startup, when grub options appear, press 'c' to enter grub menu.
 You should see the prompt :
-```
+```sh
 grub>
 ```
 
 In the GRUB bootloader, assign the Alpine ISO as a loopback device, so the system treats it as a virtual disk it can boot from
 
-```
+```sh
 grub> loopback loop /alpine-virt-3.14.2-x86_64.iso
 ```
 
 To make it bootable, load the kernel and the initial ramdisk from the loopback device (loop)
 
-```
+```sh
 grub> linux (loop)/boot/vmlinuz-virt
 grub> initrd (loop)/boot/initramfs-virt
 ```
 
 Then boot into the live Alpine system
 
-```
+```sh
 grub> boot
 ```
 
@@ -131,7 +133,7 @@ In the initramfs emergency recovery shell:
 <br>
 <br>
 
-```
+```sh
 # Mount the iso containing partition, to access its files
 mount /dev/sda1 /media/sda1
 
@@ -157,7 +159,7 @@ At this point :
 Alpine live system is now ready for successful boot.
 
 Exit the initramfs emergency shell and continue boot by typing 
-```
+```sh
 exit
 ```
 

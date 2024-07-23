@@ -6,17 +6,21 @@ By following this guide, you will set up a secure and efficient Alpine Linux env
 
 - Alpine OS installation the VPS [alpine_os_vps_installation](alpine_os_vps_installation.md)
 - Firewall basic rules setup [alpine_firewall_rules_setup](alpine_firewall_setup.md)
-- SSH port change
+- SSH port change [ssh_port_change](ssh_port_change.md)
 - Docker install
 
 <br>
 
->WARNING :\
->This guide assumes a basic level of familiarity with Linux command-line operations.\
+<hr>
+
+**WARNING :**\
+This guide assumes a basic level of familiarity with Linux command-line operations.\
 **The Alpine installation will completely overwrite the current OS and all existing files.**
 Proceed with caution and ensure that you have backups of any important data before making significant changes to your VPS configuration.\
 Improper handling of some steps, particularly those involving bootloader and partition changes, can render your VPS inoperable.\
 **GRUB bootloader and console access required** <br>
+
+<hr>
 
 Cloud providers console access list (not exhaustive) :<br>
 <br>

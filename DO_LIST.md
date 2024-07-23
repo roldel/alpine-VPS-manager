@@ -1,13 +1,9 @@
-Complete sections :
+- Complete sections :
  
-- Alpine base image install on VPS
+    - Update SSH port
 
-- Set firewall rules
+    - Docker install
 
-- Update SSH port
-
-- Docker install
-
-
-Compile all commands into command summary file
-
+- Create script folder
+- Compile all commands into command summary file
+- Automate process 

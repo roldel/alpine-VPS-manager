@@ -4,11 +4,9 @@
 
 <br>
 
-Context ...
+Alpine OS does not come with a pre-installed firewall. To filter connections, follow these steps to install and set up iptables:
 
-To configure Alpine OS firewall on a remote VPS, complete the following steps:
-
-1. Install iptables
+1. Install iptables package
 
 2. Set iptables rules
 
@@ -16,8 +14,8 @@ To configure Alpine OS firewall on a remote VPS, complete the following steps:
 
 <br>
 
-Security warning, potential ssh lockout
-
+**WARNING :**\
+Incorrect configuration while connected to the VPS via SSH can terminate the connection and lock you out. If this happens, you'll need to fix the firewall configuration through your cloud provider's console access.
 <br>
 
 <hr>
@@ -28,14 +26,22 @@ Security warning, potential ssh lockout
 
 <br>
 
-
+Install iptables with the following command:
 ```sh
 apk add iptables
 ```
 
+<br>
+
 ### 2. Set iptables rules
 
+**Run the following script as a whole. Executing it line by line will flush all existing rules, which can terminate your SSH connection.**
+
+This script sets up a basic security policy:
+
 ```sh
+#!/bin/sh
+
 # Flush existing rules
 iptables -F
 iptables -X
@@ -57,9 +63,19 @@ iptables -A OUTPUT -o lo -j ACCEPT
 
 ```
 
+After running the script, check the rules with:
+
+```sh
+iptables -L -vn
+```
+
+<br>
+
 ### 3. Persist iptables rules
 
-```
+To ensure the rules are enforced after a reboot:
+
+```sh
 # Set iptables to start on reboot 
 rc-update add iptables 
 
@@ -67,7 +83,7 @@ rc-update add iptables
 rc-service iptables save
 
 ```
-
+<br>
 
 
 [Back to project README](README.md)

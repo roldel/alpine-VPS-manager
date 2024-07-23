@@ -26,6 +26,7 @@ To install Alpine OS on a remote VPS, complete the following steps:
 
 <br>
 
+
 **WARNING :**\
 From step 3 system reboot, until finalized OS installation, SSH connection will not be available. Cloud provider console access required
 

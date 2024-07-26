@@ -4,9 +4,11 @@ Alpine Linux is a security-oriented, lightweight Linux distribution. Unfortunate
 <br>
 By following this guide, you will set up a secure and efficient Alpine Linux environment on your VPS.
 
-- Alpine OS installation the VPS [alpine_os_vps_installation](alpine_os_vps_installation.md)
-- SSH default port change and firewall setup [ssh_port_change_firewall_setup](ssh_port_change_firewall_setup.md)
-- [Docker install](docker_install.md)
+- [Alpine OS installation on VPS ](alpine_os_vps_installation.md)
+
+- [Alpine default SSH port change and firewall configuration](ssh_port_change_firewall_setup.md)
+
+- [Alpine Docker install](docker_install.md)
 
 <br>
 

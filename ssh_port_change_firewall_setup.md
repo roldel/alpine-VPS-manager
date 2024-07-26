@@ -157,6 +157,15 @@ ssh <username>@<ipaddress> -p <new_port_number>
 
 <br>
 
+### Further considerations :
+
+Security possible additional layers :
+
+  - Install fail2ban
+  - limit connection over ipv6
+
+<br> 
+
 [Next step : Docker install](docker_install.md)
 
 <br>

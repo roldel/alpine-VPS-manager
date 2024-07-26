@@ -192,7 +192,7 @@ As the Alpine installer process is managed from the cloud provider console, whic
 <br>
 
 
-Next step : [Alpine Firewall Setup](alpine_firewall_setup.md)
+Next step : [Alpine Default SSH Port change and Firewall Setup](ssh_port_change_firewall_setup.md)
 
 <br>
 
